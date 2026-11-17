@@ -1,392 +1,297 @@
-# PhoneTech Accessories
+# Mini-projet Docker
 
-## 1. Présentation du projet
+Application web **Flask** conteneurisée avec **Docker**, configurable par variables d'environnement, versionnée avec Git (GitHub) et publiée sur **Docker Hub**.
 
-**PhoneTech Accessories** est un site web e-commerce développé avec **WordPress** dans le cadre du projet Full Stack & Microservices.
+- Dépôt Git : https://github.com/hyybaafarhat-bit/mini-projet-docker
+- Image Docker Hub : https://hub.docker.com/r/hybafarhat/mini-projet-docker (`hybafarhat/mini-projet-docker`)
+- Environnement : Ubuntu Server 26.04 (VMware), Docker 29.10.0, Git 2.53.0
 
-Le site est destiné à une entreprise spécialisée dans la vente d’accessoires pour smartphones. Il permet aux visiteurs de découvrir les produits disponibles, consulter leurs caractéristiques, les ajouter au panier et contacter l’entreprise.
+## Contenu du dépôt
 
-### Objectifs du projet
+| Fichier | Rôle |
+|---|---|
+| `app.py` | Application Flask (page d'accueil `/` et route `/health`) |
+| `requirements.txt` | Dépendances Python (`Flask==3.1.2`) |
+| `Dockerfile` | Description de la construction de l'image |
+| `.dockerignore` | Fichiers exclus du contexte de build |
+| `.gitignore` | Fichiers exclus du dépôt Git |
+| `captures/` | Captures d'écran de la démarche |
 
-- Présenter l’entreprise PhoneTech Accessories.
-- Présenter un catalogue d’accessoires pour smartphones.
-- Permettre aux utilisateurs de consulter les produits.
-- Permettre l’ajout des produits au panier.
-- Publier des articles de blog liés aux smartphones et aux nouvelles technologies.
-- Permettre aux visiteurs de contacter l’entreprise.
-- Mettre en place une architecture WordPress fonctionnelle.
+## Ce que fait l'application
 
----
+- `GET /` : page HTML qui affiche le nom de l'application et l'environnement.
+- `GET /health` : retourne `{"status": "healthy"}`.
+- L'application écoute sur `0.0.0.0:5000` pour être joignable depuis l'extérieur du conteneur.
 
-## 2. Technologies et outils utilisés
+## Variables d'environnement
 
-- **WordPress** : système de gestion de contenu utilisé pour développer le site.
-- **Elementor** : outil utilisé pour créer et personnaliser les différentes pages.
-- **WooCommerce** : extension utilisée pour gérer les produits, le catalogue et le panier.
-- **Contact Form 7** : extension utilisée pour créer le formulaire de contact.
-- **XAMPP** : environnement de développement local.
-- **Apache** : serveur web local.
-- **MySQL / MariaDB** : système de gestion de la base de données.
-- **phpMyAdmin** : outil utilisé pour gérer et exporter la base de données.
-- **HTML / CSS** : utilisés indirectement pour la structure et la présentation des pages.
+| Variable | Rôle | Valeur par défaut dans le code | Valeur par défaut dans l'image |
+|---|---|---|---|
+| `APP_NAME` | Nom affiché sur la page | `Mon application Docker` | `Mon application Docker` |
+| `ENVIRONMENT` | Environnement affiché | `Development` | `Production` |
 
----
+Le Dockerfile définit `ENV APP_NAME` et `ENV ENVIRONMENT`, ce sont donc les valeurs de la colonne « image » qui s'appliquent quand on lance le conteneur sans option `-e`.
 
-## 3. Étapes de réalisation
+## Prérequis
 
-### Étape 1 — Installation de l'environnement
+- Docker
+- Git (pour cloner le dépôt)
 
-Nous avons commencé par installer et configurer **XAMPP** afin de créer un environnement de développement local.
+## Construire l'image
 
-Les services suivants ont été activés :
-
-- Apache
-- MySQL
-
-WordPress a ensuite été installé dans le dossier :
-
-```text
-C:\xampp\htdocs\wordpress
+```bash
+git clone https://github.com/hyybaafarhat-bit/mini-projet-docker.git
+cd mini-projet-docker
+docker build -t mini-projet-docker:1.0 .
 ```
 
-Une base de données a été créée dans MySQL pour le projet.
+## Lancer le conteneur
 
-### Étape 2 — Installation et configuration de WordPress
+Commande complète (port publié, variables d'environnement et limites de ressources) :
 
-Après l'installation de WordPress, nous avons configuré :
-
-- Le nom du site : **PhoneTech Accessories**
-- Les paramètres généraux de WordPress.
-- Les pages principales du site.
-- La structure de navigation.
-
-### Étape 3 — Installation des extensions
-
-#### Elementor
-
-Elementor a été utilisé pour concevoir et personnaliser les pages du site.
-
-#### WooCommerce
-
-WooCommerce a été utilisé pour :
-
-- Créer les produits.
-- Afficher le catalogue.
-- Gérer les prix.
-- Ajouter les produits au panier.
-- Gérer les pages Boutique, Panier et Validation de la commande.
-
-#### Contact Form 7
-
-Contact Form 7 a été utilisé pour créer le formulaire permettant aux visiteurs d'envoyer un message à l'entreprise.
-
----
-
-## 4. Structure du site
-
-### Accueil
-
-La page d'accueil présente :
-
-- Le nom de l'entreprise.
-- Une présentation de PhoneTech Accessories.
-- Un bouton permettant d'accéder au catalogue.
-- Une section présentant les produits vedettes.
-- Une présentation rapide de l'entreprise.
-
-### Catalogue
-
-La page Catalogue présente les accessoires disponibles sous forme de grille.
-
-Les produits sont affichés grâce à WooCommerce.
-
-Le catalogue contient notamment :
-
-- Coques de protection.
-- Chargeurs.
-- Écouteurs sans fil.
-- Batteries externes.
-- Supports pour smartphones.
-
-Les visiteurs peuvent consulter les produits et les ajouter au panier.
-
-### À propos
-
-Cette page présente l'entreprise, sa mission et ses valeurs.
-
-### Blog
-
-Le site contient trois articles :
-
-1. **Les tendances des accessoires mobiles en 2026**
-2. **Conseils pour bien entretenir son smartphone**
-3. **Les innovations technologiques pour les smartphones**
-
-### Contact
-
-La page Contact contient :
-
-- Les informations de contact de l'entreprise.
-- Un formulaire de contact créé avec Contact Form 7.
-- Une présentation des coordonnées de PhoneTech Accessories.
-
----
-
-## 5. Fonctionnalités principales
-
-Le site permet aux utilisateurs de :
-
-- Consulter les différentes pages.
-- Parcourir le catalogue.
-- Consulter les produits.
-- Voir les prix des produits.
-- Ajouter un produit au panier.
-- Consulter le panier.
-- Accéder à la page de validation de commande.
-- Lire les articles du blog.
-- Contacter l'entreprise via le formulaire.
-
----
-
-## 6. Architecture WordPress
-
-L'architecture du projet repose sur **WordPress** comme système central.
-
-```text
-                    UTILISATEUR
-                         |
-                         v
-                  Site WordPress
-                         |
-          +--------------+--------------+
-          |              |              |
-          v              v              v
-       Pages          Plugins         Thème
-          |              |              |
-          |       +------+-------+      |
-          |       |              |      |
-          v       v              v      v
-      Elementor WooCommerce Contact Form 7
-                    |
-                    v
-                Produits
-                    |
-                    v
-                  Panier
-                    |
-                    v
-              Base de données
-                    |
-                    v
-                MySQL/MariaDB
+```bash
+docker run -d --name mini-app -p 5002:5000 \
+  --memory 128m --cpus 0.5 \
+  -e APP_NAME="Mon Projet DevOps" -e ENVIRONMENT="Testing" \
+  hybafarhat/mini-projet-docker:1.0
 ```
 
-### Composants de l'architecture
+Sans option `-e`, les valeurs par défaut de l'image sont utilisées :
 
-#### WordPress
-
-WordPress constitue le cœur de l'application. Il permet de gérer les pages, articles, utilisateurs, extensions et paramètres du site.
-
-#### Thème
-
-Le thème WordPress contrôle principalement l'apparence générale du site : mise en page, navigation, en-tête, pied de page et styles généraux.
-
-#### Elementor
-
-Elementor permet de construire visuellement les différentes pages du site.
-
-#### WooCommerce
-
-WooCommerce ajoute les fonctionnalités e-commerce :
-
-```text
-Produits → Catalogue → Panier → Commande
+```bash
+docker run -d --name mini-app -p 5002:5000 hybafarhat/mini-projet-docker:1.0
 ```
 
-#### Contact Form 7
+Tester :
 
-Contact Form 7 permet de gérer le formulaire de contact.
-
-#### Base de données
-
-WordPress utilise une base de données **MySQL/MariaDB** pour stocker notamment :
-
-- Les pages.
-- Les articles.
-- Les produits.
-- Les utilisateurs.
-- Les paramètres.
-- Les données WooCommerce.
-
----
-
-## 7. Architecture monolithique
-
-Une architecture monolithique regroupe les principales fonctionnalités d'une application dans une seule application.
-
-Dans notre cas, le site WordPress fonctionne principalement comme une application centralisée.
-
-```text
-+--------------------------------------+
-|          APPLICATION WORDPRESS       |
-|                                      |
-|  Pages       Blog       WooCommerce  |
-|  Elementor   Contact    Utilisateurs |
-|                                      |
-+------------------+-------------------+
-                   |
-                   v
-              Base de données
+```bash
+curl http://localhost:5002
+curl http://localhost:5002/health
+docker logs mini-app
 ```
 
-### Avantages
+Dans un navigateur : `http://<adresse-du-serveur>:5002`.
 
-- Architecture simple.
-- Installation facile.
-- Maintenance relativement simple pour un petit projet.
-- Développement rapide.
-- Une seule application à déployer.
+## Image sur Docker Hub
 
-### Inconvénients
+Dépôt public : `hybafarhat/mini-projet-docker`
 
-- Les différentes fonctionnalités sont fortement liées.
-- Une modification importante peut affecter plusieurs parties du système.
-- La montée en charge peut être plus difficile.
-- Une panne de l'application peut affecter l'ensemble du site.
-
----
-
-## 8. Architecture Microservices
-
-Une architecture microservices divise l'application en plusieurs services indépendants.
-
-Chaque service possède une responsabilité spécifique.
-
-Pour un système e-commerce plus complexe, on pourrait avoir :
-
-```text
-                    APPLICATION
-                         |
-       +-----------------+-----------------+
-       |                 |                 |
-       v                 v                 v
- Service Produits   Service Commandes   Service Utilisateurs
-       |                 |                 |
-       v                 v                 v
- Base Produits      Base Commandes    Base Utilisateurs
-
-                         |
-                         v
-                  Service Paiement
-```
-
-Chaque service peut être développé, déployé et maintenu indépendamment.
-
----
-
-## 9. Comparaison Monolithique / Microservices
-
-| Critère | Architecture monolithique | Architecture microservices |
+| Tag | Digest | Remarque |
 |---|---|---|
-| Structure | Une seule application | Plusieurs services indépendants |
-| Complexité | Faible à moyenne | Élevée |
-| Développement | Plus simple | Plus complexe |
-| Déploiement | Global | Service par service |
-| Maintenance | Simple pour un petit projet | Plus complexe |
-| Évolutivité | Limitée à grande échelle | Très bonne |
-| Isolation des erreurs | Faible | Meilleure |
-| Communication | Interne à l'application | API / réseau |
-| Base de données | Généralement centralisée | Peut être séparée par service |
-| Adapté à notre projet | Oui | Pas nécessaire pour ce projet |
+| `1.0.0` | `b4578d5ea282` | Première version, ne doit plus être réécrite |
+| `1.0.1` | `bbde2247fc59` | Version corrigée |
+| `1.0` | `bbde2247fc59` | Alias mobile : désigne la dernière version 1.0.x (ici `1.0.1`) |
+
+```bash
+docker pull hybafarhat/mini-projet-docker:1.0
+```
+
+![Tags sur Docker Hub](captures/docker-hub-tags.jpeg)
 
 ---
 
-## 10. Pourquoi WordPress convient à notre projet ?
+# Démarche suivie, étape par étape
 
-Pour **PhoneTech Accessories**, WordPress est adapté car le projet est principalement un site e-commerce de petite taille.
+## Étape 0 : Préparer le projet
 
-WordPress permet de développer rapidement :
+Création du dossier de travail et du dépôt Git sur le serveur Ubuntu.
 
-- Les pages du site.
-- Le catalogue.
-- Les produits.
-- Le panier.
-- Le blog.
-- Le formulaire de contact.
-
-WooCommerce ajoute les fonctionnalités nécessaires au commerce électronique sans devoir développer toutes les fonctionnalités depuis zéro.
-
-Une architecture microservices serait plus adaptée à une plateforme beaucoup plus importante avec plusieurs équipes et de nombreux services indépendants.
-
----
-
-## 11. Sauvegarde et export du projet
-
-Afin de permettre la restauration du projet, deux éléments principaux ont été exportés.
-
-### Base de données
-
-La base de données WordPress a été exportée depuis **phpMyAdmin** au format :
-
-```text
-.sql
+```bash
+mkdir mini-projet-docker
+cd mini-projet-docker
+docker --version
+git --version
+git init
+git branch -m main
 ```
 
-Elle contient les données nécessaires au fonctionnement du site.
+![Initialisation du dépôt Git](captures/01-git-init.png)
 
-### Fichiers WordPress
+Le Dockerfile est versionné avec le code : il fait partie du projet, garde son historique et rend le build reproductible.
 
-Les fichiers du site ont été compressés depuis :
+## Étape 1 : Écrire l'application configurable
 
-```text
-C:\xampp\htdocs\wordpress
+`app.py` lit deux variables d'environnement avec `os.getenv`, chacune avec une valeur par défaut.
+
+![Contenu de app.py et requirements.txt](captures/02-app-py.png)
+
+## Étape 2 : Écrire le Dockerfile et le .dockerignore
+
+| Instruction | Rôle |
+|---|---|
+| `FROM python:3.12-slim` | Image de base légère |
+| `WORKDIR /app` | Dossier de travail dans l'image |
+| `COPY requirements.txt .` | Copie des dépendances seules (pour le cache) |
+| `RUN pip install --no-cache-dir -r requirements.txt` | Installation des dépendances |
+| `COPY app.py .` | Copie du code, en dernier |
+| `ENV APP_NAME` / `ENV ENVIRONMENT` | Valeurs par défaut de la configuration |
+| `EXPOSE 5000` | Documente le port de l'application |
+| `CMD ["python", "app.py"]` | Commande lancée au démarrage |
+
+`FROM`, `RUN` et `COPY` créent des couches de contenu ; `ENV`, `EXPOSE` et `CMD` n'ajoutent que des métadonnées. Le `.dockerignore` garde hors de l'image le dépôt `.git`, les caches Python et les fichiers de secrets.
+
+![Dockerfile et .dockerignore](captures/02b-dockerfile.png)
+
+## Étape 3 : Construire, lancer et configurer
+
+Construction de l'image avec un tag de version :
+
+```bash
+docker build -t mini-projet-docker:1.0 .
+docker images
 ```
 
-dans une archive :
+![Build de l'image](captures/03-docker-build.png)
 
-```text
-wordpress.zip
+Lancement du conteneur `mini-app` avec un nom et un port publié, puis vérification avec `curl` et `docker logs` :
+
+```bash
+docker run -d --name mini-app -p 5002:5000 mini-projet-docker:1.0
+curl http://localhost:5002
+curl http://localhost:5002/health
+docker logs mini-app
 ```
 
-Ces deux éléments permettent de conserver une copie du projet.
+![Lancement du conteneur mini-app](captures/04-run-mini-app.png)
 
----
+Le message change quand on modifie les variables, **sans reconstruire l'image** :
 
-## 12. Structure des livrables
-
-Le dossier final peut être organisé comme suit :
-
-```text
-PhoneTech-Accessories/
-│
-├── wordpress.zip
-│
-├── phone-tech.sql
-│
-└── README.md
+```bash
+docker run -d --name mini-app-test -p 5003:5000 \
+  -e APP_NAME="Mon Projet DevOps" -e ENVIRONMENT="Testing" \
+  mini-projet-docker:1.0
 ```
 
-### Description
+![Variables d'environnement : conteneur mini-app-test](captures/05-variables-env.png)
 
-- `wordpress.zip` : fichiers du site WordPress.
-- `phone-tech.sql` : export de la base de données.
-- `README.md` : documentation du projet.
+| Conteneur | Port | Page affichée |
+|---|---|---|
+| `mini-app` | 5002 | « Mon application Docker », Production |
+| `mini-app-test` | 5003 | « Mon Projet DevOps », Testing |
 
----
+![Navigateur, port 5002](captures/navigateur-5002.png)
+![Navigateur, port 5003](captures/navigateur-5003.png)
+![Navigateur, route /health](captures/navigateur-health.png)
 
-## 13. Conclusion
+**Limites de ressources** : le conteneur `mini-app-limits` est lancé avec 128 Mo de mémoire et 0,5 CPU. Les limites sont vérifiées avec `docker inspect` et `docker stats` :
 
-Le projet **PhoneTech Accessories** a permis de mettre en place un site e-commerce fonctionnel avec WordPress.
+```bash
+docker run -d --name mini-app-limits -p 5005:5000 --memory 128m --cpus 0.5 mini-projet-docker:1.0
+docker inspect mini-app-limits --format='CPU: {{.HostConfig.NanoCpus}} | RAM: {{.HostConfig.Memory}}'
+docker stats --no-stream mini-app-limits
+```
 
-Le site intègre :
+Résultat : `CPU: 500000000 | RAM: 134217728` (0,5 CPU et 128 Mo), et `docker stats` affiche une limite de 128 MiB.
 
-- Une présentation de l'entreprise.
-- Un catalogue de produits.
-- Un système de panier grâce à WooCommerce.
-- Un blog.
-- Un formulaire de contact.
-- Une base de données MySQL/MariaDB.
+![Limites de ressources](captures/10-limites-ressources.png)
+![Navigateur, port 5005](captures/navigateur-5005.png)
 
-Le projet utilise principalement une architecture monolithique, ce qui est adapté à la taille et aux besoins actuels du site.
+## Étape 4 : Panne et diagnostic
 
-L'étude de l'architecture microservices permet cependant de comprendre comment une application plus importante pourrait être divisée en plusieurs services indépendants afin d'améliorer son évolutivité et sa maintenance.
+Une erreur est introduite dans la commande de lancement (fichier inexistant) :
+
+```bash
+docker run -d --name mini-app-panne -p 5004:5000 mini-projet-docker:1.0 python fichier-inexistant.py
+```
+
+Ordre d'investigation : `docker ps -a`, puis `docker logs`, puis `docker inspect`.
+
+```bash
+docker ps -a
+docker logs mini-app-panne
+docker inspect mini-app-panne --format '{{.State.ExitCode}} {{.Config.Cmd}}'
+```
+
+![Diagnostic de la panne](captures/06-panne-diagnostic.png)
+
+| Symptôme | Où le voir |
+|---|---|
+| Statut `Exited (2)` | `docker ps -a` |
+| `can't open file '/app/fichier-inexistant.py'` | `docker logs` |
+| `ExitCode 2` et `Cmd` erronée | `docker inspect` |
+
+**Cause racine** : la commande de lancement désigne un fichier qui n'existe pas ; l'image est saine. **Correction** : supprimer le conteneur et le relancer sans la commande erronée.
+
+```bash
+docker rm mini-app-panne
+docker run -d --name mini-app-panne -p 5004:5000 mini-projet-docker:1.0
+curl http://localhost:5004/health
+```
+
+## Étape 5 : Observer le cache
+
+Reconstruction de l'image sans changement : toutes les couches sont lues dans le cache (`CACHED`), le build passe de 9,3 s à 0,5 s.
+
+```bash
+time docker build -t mini-projet-docker:1.2 .
+```
+
+![Rebuild de la version 1.1, tout en cache](captures/07-cache-rebuild-1-1.png)
+![Rebuild de la version 1.2, 0,6 s](captures/08-cache-rebuild-1-2.png)
+
+Observation des couches avec `docker history` :
+
+```bash
+docker history mini-projet-docker:1.2
+```
+
+![docker history](captures/09-docker-history.png)
+
+Après modification du code (`app.py`), seule la couche `COPY app.py` est exécutée de nouveau, grâce à l'ordre des instructions (dépendances installées avant la copie du code) :
+
+```bash
+echo "# modif" >> app.py
+time docker build -t mini-projet-docker:1.4 .
+```
+
+| Étape du Dockerfile | Résultat après modification de `app.py` |
+|---|---|
+| `FROM`, `WORKDIR` | `CACHED` |
+| `COPY requirements.txt .` | `CACHED` |
+| `RUN pip install ...` | `CACHED` |
+| `COPY app.py .` | exécutée de nouveau |
+
+![Build après modification du code](captures/08b-cache-apres-modification.png)
+
+Si tout le code était copié avant l'installation des dépendances, chaque modification invaliderait le cache et `pip install` serait refait à chaque build.
+
+## Étape 6 : Versionner et publier
+
+Connexion à Docker Hub, puis publication de deux versions avec un alias :
+
+```bash
+docker login
+docker tag mini-projet-docker:1.3 hybafarhat/mini-projet-docker:1.0.0
+docker tag mini-projet-docker:1.3 hybafarhat/mini-projet-docker:1.0
+docker push hybafarhat/mini-projet-docker:1.0.0
+docker push hybafarhat/mini-projet-docker:1.0
+```
+
+![Connexion, push et pull](captures/11-docker-push.png)
+
+Après modification du code, publication de `1.0.1` et déplacement de l'alias `1.0` :
+
+```bash
+docker build -t mini-projet-docker:1.0.1 .
+docker tag mini-projet-docker:1.0.1 hybafarhat/mini-projet-docker:1.0.1
+docker tag mini-projet-docker:1.0.1 hybafarhat/mini-projet-docker:1.0
+docker push hybafarhat/mini-projet-docker:1.0.1
+docker push hybafarhat/mini-projet-docker:1.0
+```
+
+Sur Docker Hub, `1.0` et `1.0.1` ont le même digest ; `1.0.0` garde l'ancien (voir le tableau plus haut). Un tag de version précise déjà publié ne doit pas être réécrit : seul l'alias `1.0` se déplace.
+
+## Étape 7 : Documenter
+
+Ce `README.md` décrit l'application, la construction, le lancement complet (port, variables, limites), les variables avec leurs valeurs par défaut, le nom de l'image et ses versions. Les commandes de ce fichier suffisent à lancer l'image sans aide.
+
+Publication sur GitHub :
+
+```bash
+git add .
+git commit -m "Ajout du README"
+git push
+```
+
+![Premier commit](captures/13-git-commit-initial.png)
+![Push du README](captures/14-git-push-readme.png)
