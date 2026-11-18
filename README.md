@@ -295,3 +295,16 @@ git push
 
 ![Premier commit](captures/13-git-commit-initial.png)
 ![Push du README](captures/14-git-push-readme.png)
+
+---
+
+## Réponses aux questions de l'énoncé
+
+- **Étape 0 : pourquoi versionner le Dockerfile avec le code ?** Le Dockerfile fait partie du projet : versionné avec le code, il garde l'historique des changements et rend le build reproductible avec un simple `git clone`.
+- **Étape 1 : pourquoi une variable d'environnement plutôt que modifier l'image ?** La même image sert pour plusieurs environnements (Production, Testing) sans être reconstruite : seul le conteneur change.
+- **Étape 2 : quelles instructions créent une couche ?** `FROM`, `RUN` et `COPY` créent des couches de contenu ; `ENV`, `EXPOSE` et `CMD` n'ajoutent que des métadonnées (0 B dans `docker history`).
+- **Étape 3 : quelles limites et comment les vérifier ?** `--memory 128m` et `--cpus 0.5`, vérifiées avec `docker inspect` (134217728 octets et 500000000 NanoCpus) et `docker stats`.
+- **Étape 4 : symptômes et cause racine ?** Statut `Exited (2)` et message `can't open file '/app/fichier-inexistant.py'`. La cause racine est la commande de lancement qui désigne un fichier inexistant ; l'image est saine.
+- **Étape 5 : que se passerait-il si on copiait tout le code avant les dépendances ?** Chaque modification du code invaliderait la couche `COPY`, donc `pip install` serait refait à chaque build.
+- **Étape 6 : pourquoi ne pas réécrire un tag de version précise ?** Un tag comme `1.0.0` doit toujours désigner la même image (même digest) pour garantir un résultat reproductible ; seul l'alias `1.0` se déplace.
+- **Étape 7 : quelles informations manquaient dans le README ?** La première version ne précisait pas les limites de ressources, les variables avec leurs valeurs par défaut ni les versions de l'image.
